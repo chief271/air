@@ -1,4 +1,14 @@
 const { Pool } = require("pg");
+const { Pool } = require("pg");
+
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL, // Use Railway-provided variable
+  ssl: {
+    rejectUnauthorized: false, // Needed for secure connection
+  },
+});
+
+module.exports = pool;
 
 const pool = new Pool({
     host: "centerbeam.proxy.rlwy.net",
