@@ -6,11 +6,15 @@ const pool = new Pool({
     user: "postgres",
     password: "lhsuKSVTHcDEpvPkTDUhXZgExLXEFJth",
     database: "railway",
-    ssl: { rejectUnauthorized: false }, // Use SSL if required by Railway
+    ssl: { rejectUnauthorized: false }, // Required for Railway
 });
 
-client.connect()
-    .then(() => console.log("Connected to PostgreSQL"))
-    .catch(err => console.error("Connection error", err.stack));
+// Test connection
+pool.connect()
+    .then(client => {
+        console.log("✅ Connected to PostgreSQL");
+        client.release(); // Release client back to pool
+    })
+    .catch(err => console.error("❌ Connection error:", err.stack));
 
 module.exports = pool;
