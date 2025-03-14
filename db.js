@@ -1,16 +1,16 @@
-const { Pool } = require('pg');
+const { Pool } = require("pg");
 
 const pool = new Pool({
-    user: 'postgres',      // Remplace par ton utilisateur PostgreSQL
-    host: 'localhost',            // Laisse "localhost" si la base est locale
-    database: 'AirAlgerie',     // Nom de ta base de données
-    password: '0000', // Remplace par ton mot de passe PostgreSQL
-    port: 5432,                   // Port par défaut de PostgreSQL
+    host: "centerbeam.proxy.rlwy.net",
+    port: 26655,
+    user: "postgres",
+    password: "lhsuKSVTHcDEpvPkTDUhXZgExLXEFJth",
+    database: "railway",
+    ssl: { rejectUnauthorized: false }, // Use SSL if required by Railway
 });
 
-// Vérifier la connexion
-pool.connect()
-    .then(() => console.log('✅ Connecté à PostgreSQL'))
-    .catch(err => console.error('❌ Erreur de connexion à PostgreSQL:', err));
+client.connect()
+    .then(() => console.log("Connected to PostgreSQL"))
+    .catch(err => console.error("Connection error", err.stack));
 
-module.exports = pool; // Exporter l'objet pool pour pouvoir l'utiliser ailleurs
+module.exports = pool;
