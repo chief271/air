@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/demande.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <title>Document</title>
+    <style>
+        /* Status and Decision Styles */
+        .approve-btn, .refuse-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0 5px;
+        }
+
+        .approve-btn {
+            background-color: #10B981;
+            color: white;
+        }
+
+        .approve-btn:hover {
+            background-color: #059669;
+            transform: translateY(-2px);
+        }
+
+        .refuse-btn {
+            background-color: #EF4444;
+            color: white;
+        }
+
+        .refuse-btn:hover {
+            background-color: #DC2626;
+            transform: translateY(-2px);
+        }
+
+        .decision-made {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        /* Status Icons */
+        .fas {
+            font-size: 16px;
+        }
+
+        td span {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        td span[style*="color: green"] {
+            background-color: rgba(16, 185, 129, 0.1);
+        }
+
+        td span[style*="color: red"] {
+            background-color: rgba(239, 68, 68, 0.1);
+        }
+
+        td span[style*="color: orange"] {
+            background-color: rgba(245, 158, 11, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="nav-bar">
+        <div>
+            <img src="imgs/téléchargement.png" alt="Logo">
+            <h3> <a href="gestionconge">Gestion des congés</a></h3>
+        </div>
+        <ul>
+            <li>Etat Divers</li>
+            <li>
+                <% if (user.groupeid===1){%>
+                    <a href="administration">administration</a>
+                    <% } %>
+            </li>
+            <li><a href="demande">Demandes en attente</a></li>
+            <li class="drop-menu">
+                <a class="drop-down ">Bonjour,<%= user.nomcomplet %> ▼</a>
+                <div class="drop-content">
+                    <a href="/logout" class="btn btn-danger">Logout</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <h2>Demande En attend</h2>
+    <table border="1" id="demandeTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Date Demande</th>
+                <th>Date Début</th>
+                <th>Date Fin</th>
+                <th>Nature</th>
+                <th>Motif</th>
+                <th>État</th>
+                <th>D'après</th>
+                <% if (user.groupeid === 1) { %>
+                    <th>Décision</th>
+                <% } %>
+            </tr>
+            <tr class="filter-row">
+                <th><input type="text" class="filter-input" data-column="0" placeholder="Filter ID..."></th>
+                <th><input type="text" class="filter-input" data-column="1" placeholder="Filter Date..."></th>
+                <th><input type="text" class="filter-input" data-column="2" placeholder="Filter Date Début..."></th>
+                <th><input type="text" class="filter-input" data-column="3" placeholder="Filter Date Fin..."></th>
+                <th><input type="text" class="filter-input" data-column="4" placeholder="Filter Nature..."></th>
+                <th><input type="text" class="filter-input" data-column="5" placeholder="Filter Motif..."></th>
+                <th><input type="text" class="filter-input" data-column="6" placeholder="Filter État..."></th>
+                <th><input type="text" class="filter-input" data-column="7" placeholder="Filter Nom..."></th>
+                <% if (user.groupeid === 1) { %>
+                    <th></th>
+                <% } %>
+            </tr>
+        </thead>
+        <tbody>
+            <% if (user.groupeid === 1) { %>
+                <% if (demandes && demandes.length > 0) { %>
+                    <% demandes.forEach(demande => { %>
+                        <tr>
+                            <td><%= demande.id %></td>
+                            <td><%= demande.date_dmd %></td>
+                            <td><%= demande.date_debut %></td>
+                            <td><%= demande.date_fin %></td>
+                            <td><%= demande.nature %></td>
+                            <td><%= demande.motif %></td>
+                            <td>
+                                <% if (demande.etat === 0) { %>
+                                    <span style="color: orange;">En Attente</span>
+                                <% } else if (demande.etat === 1) { %>
+                                    <span style="color: green;">
+                                        <i class="fas fa-check-circle"></i> 
+                                        Approuvé par <%= demande.approver_name %>
+                                    </span>
+                                <% } else { %>
+                                    <span style="color: red;">
+                                        <i class="fas fa-times-circle"></i>
+                                        Refusé par <%= demande.approver_name %>
+                                    </span>
+                                <% } %>
+                            </td>
+                            <td><%= demande.nomcomplet %></td>
+
+                            <% if (user.groupeid === 1) { %>
+                                <td>
+                                    <% if (demande.etat === 0) { %>
+                                        <form action="/update-etat/<%= demande.id %>" method="POST" style="display: inline;">
+                                            <button type="submit" class="approve-btn">
+                                                <i class="fas fa-check"></i> Approuver
+                                            </button>
+                                        </form>
+                                        <form action="/annuler-demande/<%= demande.id %>" method="POST" style="display: inline;">
+                                            <button type="submit" class="refuse-btn">
+                                                <i class="fas fa-times"></i> Refuser
+                                            </button>
+                                        </form>
+                                    <% } else if (demande.etat === 1) { %>
+                                        <span class="decision-made">
+                                            <i class="fas fa-check-circle"></i>
+                                            Approuvé par <%= demande.approver_name %>
+                                        </span>
+                                    <% } else { %>
+                                        <span class="decision-made">
+                                            <i class="fas fa-times-circle"></i>
+                                            Refusé par <%= demande.approver_name %>
+                                        </span>
+                                    <% } %>
+                                </td>
+                            <% } %>
+                        </tr>
+                    <% }); %>
+                <% } else { %>
+                    <tr>
+                        <td colspan="9">Aucune demande trouvée.</td>
+                    </tr>
+                <% } %>
+            <% } else { %>
+                <!-- Employé -->
+                <% if (userdemandes && userdemandes.length > 0) { %>
+                    <% userdemandes.forEach(demande => { %>
+                        <tr>
+                            <td><%= demande.id %></td>
+                            <td><%= demande.date_dmd %></td>
+                            <td><%= demande.date_debut %></td>
+                            <td><%= demande.date_fin %></td>
+                            <td><%= demande.nature %></td>
+                            <td><%= demande.motif %></td>
+                            <td>
+                                <% if (demande.etat === 0) { %>
+                                    <span style="color: orange;">En Attente</span>
+                                <% } else if (demande.etat === 1) { %>
+                                    <span style="color: green;">
+                                        <i class="fas fa-check-circle"></i> 
+                                        Approuvé par <%= demande.approver_name %>
+                                    </span>
+                                <% } else { %>
+                                    <span style="color: red;">
+                                        <i class="fas fa-times-circle"></i>
+                                        Refusé par <%= demande.approver_name %>
+                                    </span>
+                                <% } %>
+                            </td>
+                            <td><%= demande.nomcomplet %></td>
+                        </tr>
+                    <% }); %>
+                <% } else { %>
+                    <tr>
+                        <td colspan="8">Aucune demande trouvée.</td>
+                    </tr>
+                <% } %>
+            <% } %>
+        </tbody>
+    </table>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Format dates in the table
+            function formatDate(dateString) {
+                const date = new Date(dateString);
+                const day = date.getDate().toString().padStart(2, '0');
+                const month = (date.getMonth() + 1).toString().padStart(2, '0');
+                const year = date.getFullYear();
+                return `${day}/${month}/${year}`;
+            }
+
+            // Format all date cells
+            const tableRows = document.querySelectorAll('tbody tr');
+            tableRows.forEach(row => {
+                if (row.cells.length > 3) { // Make sure it's not an empty row
+                    // Format date_dmd (index 1)
+                    const dateDmd = row.cells[1].textContent.trim();
+                    if (dateDmd) row.cells[1].textContent = formatDate(dateDmd);
+
+                    // Format date_debut (index 2)
+                    const dateDebut = row.cells[2].textContent.trim();
+                    if (dateDebut) row.cells[2].textContent = formatDate(dateDebut);
+
+                    // Format date_fin (index 3)
+                    const dateFin = row.cells[3].textContent.trim();
+                    if (dateFin) row.cells[3].textContent = formatDate(dateFin);
+                }
+            });
+
+            const filterInputs = document.querySelectorAll('.filter-input');
+            const table = document.getElementById('demandeTable');
+            const tbody = table.querySelector('tbody');
+            const rows = tbody.getElementsByTagName('tr');
+
+            // Function to filter table
+            function filterTable() {
+                const filters = Array.from(filterInputs).map(input => ({
+                    value: input.value.toLowerCase(),
+                    column: parseInt(input.dataset.column)
+                }));
+
+                for (let row of rows) {
+                    if (row.cells.length <= 1) continue; // Skip "no data" rows
+
+                    let showRow = true;
+                    for (let filter of filters) {
+                        const cell = row.cells[filter.column];
+                        const text = cell.textContent.toLowerCase();
+                        if (filter.value && !text.includes(filter.value)) {
+                            showRow = false;
+                            break;
+                        }
+                    }
+                    row.style.display = showRow ? '' : 'none';
+                }
+            }
+
+            // Add event listeners to filter inputs
+            filterInputs.forEach(input => {
+                input.addEventListener('input', filterTable);
+            });
+        });
+    </script>
+</body>
+</html>

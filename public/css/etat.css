@@ -1,0 +1,162 @@
+@import url('https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Inria Sans", serif;
+}
+
+
+.nav-bar {
+    display: flex;
+    padding: 10px;
+    justify-content: space-between;
+    background-color: black;
+    color: white;
+
+    a {
+        text-decoration: none;
+        color: white;
+    }
+
+    img {
+        object-fit: contain;
+        width: 100px;
+        height: 50px;
+    }
+
+    div {
+       
+        display: flex;
+        align-items: center;
+        
+    }
+
+    ul {
+        list-style: none;
+        display: flex;
+        gap: 15px;
+        padding: 0;
+        margin: 0;
+        align-items: center;
+    }
+
+    ul li {
+        display: inline-block;
+        position: relative;
+        border-bottom: 1px solid white;
+    }
+
+    ul li:last-child {
+        border-bottom: 1px solid red;
+    }
+
+    .drop-menu {
+        position: relative;
+    }
+
+    .drop-down {
+        text-decoration: none;
+        display: block;
+        cursor: pointer;
+    }
+
+    .drop-content {
+        display: none;
+        position: absolute;
+        background-color: white;
+        min-width: 150px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        padding: 10px;
+        border-radius: 5px;
+        a{
+            color: black;
+        }
+        
+    }
+
+    .drop-menu:hover .drop-content {
+        display: block;
+    }
+
+}
+.container {
+    width: 100%;
+    padding-right: 12px;
+    padding-left: 12px;
+    margin-right: auto;
+    margin-left: auto;
+  }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  th {
+    background: #007bff;
+    color: white;
+    text-transform: uppercase;
+  }
+  
+  tr:nth-child(even) {
+    background: #f8f9fa;
+  }
+  
+  tr:hover {
+    background: rgba(0, 123, 255, 0.1);
+  }
+  
+  .status {
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+  
+  .status.leave {
+    background: #ffc107;
+    color: #856404;
+  }
+  .captions{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+    .details {
+        display: flex;
+        align-items: center;
+        gap: 5px; 
+    }
+    
+    .retour {
+        width: 20px; 
+        height: 20px; 
+        border-radius: 50%; 
+        background-color: lightgreen; 
+    }
+    .conge{
+        width: 20px; 
+        height: 20px; 
+        border-radius: 50%; 
+        background-color: #ffc107; 
+    }
+    
+}
+  .status.back {
+    background: #28a745;
+    color: white;
+  }
+  
+  

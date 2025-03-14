@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Congés</title>
+    <link rel="stylesheet" href="css/style1.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border: 1px solid #e5e7eb;
+        }
+
+        th {
+            background-color: #f9fafb;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        td {
+            color: #4b5563;
+        }
+
+        /* Status and Download Button Styles */
+        .status-approved, .status-refused {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+
+        .status-approved {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: #059669;
+        }
+
+        .status-refused {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+        }
+
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            background: white;
+            border: 1px solid currentColor;
+            color: inherit;
+            transition: all 0.2s ease;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .download-btn i {
+            font-size: 16px;
+        }
+
+        /* Date cells */
+        td:nth-child(2),
+        td:nth-child(3),
+        td:nth-child(4) {
+            font-family: monospace;
+            font-size: 0.95em;
+        }
+
+        /* Profile styles */
+        .profile {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .profile img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-bottom: 20px;
+        }
+
+        .profile table {
+            margin-bottom: 20px;
+        }
+
+        .profile button {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .profile button:hover {
+            background-color: #3e8e41;
+        }
+
+        /* Popup styles */
+        .popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .popup-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .submit-button {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .submit-button:hover {
+            background-color: #3e8e41;
+        }
+
+        
+
+        .highlight-red {
+            color: #dc2626;
+        }
+
+        .request-leave-btn {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .request-leave-btn:hover {
+            background-color: #3e8e41;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-bar">
+        <div>
+            <img src="imgs/téléchargement.png" alt="Logo">
+            <h3>Gestion des congés</h3>
+        </div>
+        <ul>
+            <li><a href="etat">Etat Divers</a></li>
+            <li>
+                <% if (user.groupeid===1){%>
+                    <a href="administration">administration</a>
+                <% } %>
+            </li>
+            <li><a href="demande">Demandes en attente</a></li>
+            <li class="drop-menu">
+                <a class="drop-down">Bonjour,<%= user.nomcomplet %> ▼</a>
+                <div class="drop-content">
+                    <a href="/logout" class="btn btn-danger">Logout</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <div class="profile">
+            <div>
+                <i class="fa-regular fa-address-card fa-4x"></i>
+            </div>
+            <div>
+                <table>
+                    <tr>
+                        <th>Date Entree</th>
+                        <td><%= user.date_entree %></td>
+                    </tr>
+                    <tr>
+                        <th>Fonction</th>
+                        <td>
+                            <% if(user.groupeid===1){ %>
+                                admin
+                            <% } else{ %>
+                                Employer
+                            <% } %>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div>
+                <span>Compte courant</span> | <span class="highlight-red">50 jour</span>
+                <button id="openpopup" class="request-leave-btn">Demander un congé</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Historique Des Demandes</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Date de demande</th>
+                    <th>Date de debut</th>
+                    <th>Date de fin</th>
+                    <th>Nature</th>
+                    <th>Motif</th>
+                    <th>État</th>
+                    <th>Nom</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (!demandes || demandes.length===0) { %>
+                    <tr>
+                        <td colspan="8">Tu n'as pas déposé aucun demande de congé</td>
+                    </tr>
+                <% } else { %>
+                    <% demandes.forEach(demande=> { %>
+                        <% if (demande.etat !==0) { %>
+                            <tr>
+                                <td><%= demande.id %></td>
+                                <td><%= demande.date_dmd %></td>
+                                <td><%= demande.date_debut %></td>
+                                <td><%= demande.date_fin %></td>
+                                <td><%= demande.nature %></td>
+                                <td><%= demande.motif %></td>
+                                <td>
+                                    <% if (demande.etat===1) { %>
+                                        <span class="status-approved">
+                                            APPROUVÉ 
+                                            <a href="/download/<%= demande.id %>" class="download-btn">
+                                                <i class="fa-solid fa-file-download"></i>
+                                            </a>
+                                        </span>
+                                    <% } else if (demande.etat===2) { %>
+                                        <span class="status-refused">
+                                            REFUSÉ 
+                                            <a href="/download/<%= demande.id %>" class="download-btn">
+                                                <i class="fa-solid fa-file-download"></i>
+                                            </a>
+                                        </span>
+                                    <% } %>
+                                </td>
+                                <td><%= user.nomcomplet %></td>
+                            </tr>
+                        <% } %>
+                    <% }) %>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="popup" id="popup">
+        <div class="popup-content">
+            <span class="close"><i class="fas fa-times"></i></span>
+            <div class="logo">
+                <img src="/imgs/téléchargement.png" alt="Logo">
+            </div>
+            <form action="/add-demande" method="post">
+                <h2>Titre de Congé</h2>
+
+                <div class="form-group">
+                    <label for="matricule">N° Matricule :</label>
+                    <input type="text" id="matricule" name="matricule" value="<%= user.id %>" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label for="affectation">Affectation :</label>
+                    <input type="text" id="affectation" name="affectation">
+                </div>
+
+                <div class="form-group">
+                    <label for="date_debut">Valable du :</label>
+                    <input type="date" id="date_debut" name="date_debut" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="date_fin">Au :</label>
+                    <input type="date" id="date_fin" name="date_fin" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="nature">Nature du congé :</label>
+                    <select name="nature" id="nature" required>
+                        <option value="annuel">Annuel</option>
+                        <option value="excep">Exceptionnel</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="motif">Motif du congé :</label>
+                    <select name="motif" id="motif" required>
+                        <option value="aucun">Aucun</option>
+                        <option value="mariage">Mariage</option>
+                        <option value="naissance">Naissance</option>
+                    </select>
+                </div>
+
+                <button class="submit-button" type="submit">Soumettre</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const popup = document.getElementById('popup');
+        const openpopup = document.getElementById('openpopup');
+        const closepopup = document.querySelector('.close');
+
+        openpopup.addEventListener('click', () => {
+            popup.style.display = 'flex';
+        });
+
+        closepopup.addEventListener('click', () => {
+            popup.style.display = 'none';
+        });
+
+        window.addEventListener('click', (e) => {
+            if (e.target === popup) {
+                popup.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
