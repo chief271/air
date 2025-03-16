@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Etat Divers</title>
+    <link rel="stylesheet" href="css/etat.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <div class="nav-bar">
+        <div>
+            <img src="imgs/téléchargement.png" alt="Logo">
+            <h3>Gestion des congés</h3>
+        </div>
+        <ul>
+            <li><a href="etat">Etat Divers</a></li>
+            <li>
+                <% if (user.groupeid===1){%>
+                    <a href="administration">administration</a>
+                <% } %>
+            </li>
+            <li><a href="demande">Demandes en attente</a></li>
+            <li class="drop-menu">
+                <a class="drop-down">Bonjour,<%= user.nomcomplet %> ▼</a>
+                <div class="drop-content">
+                    <a href="/logout" class="btn btn-danger">Logout</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Employee Leave Tracker</title>
+        <link rel="stylesheet" href="styles.css"> <!-- Link your CSS file -->
+    </head>
+    <body>
+    
+        <div class="container">
+            <div class="captions">
+                <h2>Suivi des Congés et Retours des Employés</h2>
+                <div class="details">
+                   2 <div class="retour"></div>
+                    2 <div class="conge"></div>
+                </div>
+            </div>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nom</th>
+                        <th>Poste</th>
+                        <th>Date de départ</th>
+                        <th>Date de retour</th>
+                        <th>Statut</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>leila </td>
+                        <td>Développeur Logiciel</td>
+                        <td>2025-03-10</td>
+                        <td>2025-03-20</td>
+                        <td><span class="status leave">En congé</span></td>
+                        <td>
+                            <button class="edit-btn">Modifier</button>
+                            <button class="delete-btn">Supprimer</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>ali</td>
+                        <td>Chef de Projet</td>
+                        <td>2025-02-25</td>
+                        <td>2025-03-05</td>
+                        <td><span class="status back">De retour</span></td>
+                        <td>
+                            <button class="edit-btn">Modifier</button>
+                            <button class="delete-btn">Supprimer</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>sarah </td>
+                        <td>Développeur Logiciel</td>
+                        <td>2025-03-10</td>
+                        <td>2025-03-20</td>
+                        <td><span class="status leave">En congé</span></td>
+                        <td>
+                            <button class="edit-btn">Modifier</button>
+                            <button class="delete-btn">Supprimer</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>hassen</td>
+                        <td>Chef de Projet</td>
+                        <td>2025-02-25</td>
+                        <td>2025-03-05</td>
+                        <td><span class="status back">De retour</span></td>
+                        <td>
+                            <button class="edit-btn">Modifier</button>
+                            <button class="delete-btn">Supprimer</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    
+    </body>
+    </html>
+    
+</body>
+</html>

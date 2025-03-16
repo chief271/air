@@ -1,0 +1,201 @@
+@import url('https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Inria Sans", serif;
+}
+
+.nav-bar {
+    display: flex;
+    padding: 10px;
+    justify-content: space-between;
+    background-color: black;
+    color: white;
+
+    a {
+        text-decoration: none;
+        color: white;
+    }
+
+    img {
+        object-fit: contain;
+        width: 100px;
+        height: 50px;
+    }
+
+    div {
+       
+        display: flex;
+        align-items: center;
+        
+    }
+
+    ul {
+        list-style: none;
+        display: flex;
+        gap: 15px;
+        padding: 0;
+        margin: 0;
+        align-items: center;
+    }
+
+    ul li {
+        display: inline-block;
+        position: relative;
+        border-bottom: 1px solid white;
+    }
+
+    ul li:last-child {
+        border-bottom: 1px solid red;
+    }
+
+    .drop-menu {
+        position: relative;
+    }
+
+    .drop-down {
+        text-decoration: none;
+        display: block;
+        cursor: pointer;
+    }
+
+    .drop-content {
+        display: none;
+        position: absolute;
+        background-color: white;
+        min-width: 150px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        padding: 10px;
+        border-radius: 5px;
+        a{
+            color: black;
+        }
+        
+    }
+
+    .drop-menu:hover .drop-content {
+        display: block;
+    }
+
+}
+h2 {
+    text-align: center;
+    margin: 20px 0;
+    color: #222;
+}
+
+.header {
+    background-color: #222;
+    color: white;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+}
+
+/* Filter styles */
+.filter-row th {
+    padding: 5px;
+}
+
+.filter-input {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.filter-input:focus {
+    outline: none;
+    border-color: #4CAF50;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
+}
+
+/* Highlight filtered matches */
+.highlight {
+    background-color: yellow;
+}
+
+/* Table Styling */
+table {
+    width: 90%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+th, td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #333;
+    color: white;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Status Colors */
+span {
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+span[style="color: orange;"] {
+    background-color: #ffcc80;
+    color: #8a4b08;
+}
+
+span[style="color: green;"] {
+    background-color: #c8e6c9;
+    color: #1b5e20;
+}
+
+span[style="color: red;"] {
+    background-color: #ef9a9a;
+    color: #b71c1c;
+}
+
+/* Buttons */
+button {
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background 0.3s;
+    font-weight: bold;
+}
+
+button[type="submit"] {
+    background-color: #28a745;
+    color: white;
+}
+
+button[type="submit"]:hover {
+    background-color: #218838;
+}
+
+/* Cancel Button */
+form button[type="submit"].cancel {
+    background-color: #dc3545;
+}
+
+form button[type="submit"].cancel:hover {
+    background-color: #c82333;
+}

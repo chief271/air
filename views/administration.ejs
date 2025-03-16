@@ -1,0 +1,108 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/admin.css">
+    <title>Administration - Gestion des congés</title>
+    <style>
+        
+    </style>
+</head>
+
+<body>
+    <div class="nav-bar">
+        <div>
+            <img src="imgs/téléchargement.png" alt="Logo">
+            <h3>Gestion des congés</h3>
+        </div>
+        <ul>
+            <li>Etat Divers</li>
+            <li>
+                <% if (user.groupeid ===1){%>
+                    <a href="administration">administration</a>
+                    <% } %>
+            </li>
+            <li><a href="demande">Demandes en attente</a></li>
+            <li class="drop-menu">
+                <a class="drop-down ">Bonjour,<%= user.nomcomplet %> ▼</a>
+                <div class="drop-content">
+                    <a href="/logout" class="btn btn-danger">Logout</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+    
+    <div class="table-container">
+        <div class="table-header">
+            <div class="table-title">Liste des Employés</div>
+            <div class="search-container">
+                <form action="/administration" method="GET" class="search-form">
+                    <input type="text" 
+                           name="search" 
+                           placeholder="Rechercher par nom ou ID..." 
+                           value="<%= searchQuery %>"
+                           class="search-input">
+                    <button type="submit" class="search-button">
+                        🔍 Rechercher
+                    </button>
+                </form>
+            </div>
+            <div class="table-stats">Total: <%= pagination.totalEmployees %> employés</div>
+        </div>
+
+        <% if (employees.length === 0) { %>
+            <div class="no-results">
+                Aucun employé trouvé<% if (searchQuery) { %> pour "<%= searchQuery %>"<% } %>
+            </div>
+        <% } else { %>
+            <table class="employee-table">
+                <thead>
+                    <tr>
+                        <th>Nom Complet</th>
+                        <th>Date d'entrée</th>
+                        <th>Années de service</th>
+                        <th>Jours de congé</th>
+                        <th>Jours utilisés</th>
+                        <th>Jours restants</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% employees.forEach(employee => { %>
+                        <tr>
+                            <td><%= employee.nomcomplet %></td>
+                            <td><%= new Date(employee.date_entree).toLocaleDateString() %></td>
+                            <td><span class="days-count years-service"><%= employee.years_of_service %> ans</span></td>
+                            <td><%= employee.base_days %> jours</td>
+                            <td><span class="days-count days-used"><%= employee.days_used %></span></td>
+                            <td><span class="days-count days-remaining"><%= employee.remaining_days %></span></td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        <% } %>
+
+        <!-- Pagination -->
+        <div class="pagination">
+            <% if (pagination.hasPrev) { %>
+                <a href="?page=<%= pagination.page - 1 %>" class="page-link">&laquo; Précédent</a>
+            <% } %>
+
+            <% for(let i = 1; i <= pagination.totalPages; i++) { %>
+                <a href="?page=<%= i %>" 
+                   class="page-link <%= pagination.page === i ? 'active' : '' %>">
+                    <%= i %>
+                </a>
+            <% } %>
+
+            <% if (pagination.hasNext) { %>
+                <a href="?page=<%= pagination.page + 1 %>" class="page-link">Suivant &raquo;</a>
+            <% } %>
+        </div>
+
+        <div class="pagination-info">
+            Page <%= pagination.page %> sur <%= pagination.totalPages %> 
+            (Total: <%= pagination.totalEmployees %> employés)
+        </div>
+    </div>
+</body>
+</html>
